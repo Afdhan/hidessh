@@ -4,11 +4,6 @@
 #OS Debian 9
 apt-get update && apt-get upgrade -y
 apt-get install wget curl -y
-#installer auto SSH, Dropbear , Stunnel, badVPN
-cd
-wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh-baru.sh
-chmod +x ssh-baru.sh
-bash ssh-baru.sh
 
 
 #auto installer L2TP/Ipsec PSk 
@@ -44,6 +39,14 @@ wget -O /usr/local/bin/stdev-l2tp-remove-user "https://gist.githubusercontent.co
 chmod +x /usr/local/bin/stdev-l2tp-get-psk 
 chmod +x /usr/local/bin/stdev-l2tp-add-user 
 chmod +x /usr/local/bin/stdev-l2tp-remove-user 
+
+
+#installer auto SSH, Dropbear , Stunnel, badVPN
+cd
+wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh-baru.sh
+chmod +x ssh-baru.sh
+./ssh-baru.sh
+
 
 #hapus script
 rm -rf tunnel1.sh
