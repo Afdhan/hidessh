@@ -20,7 +20,7 @@ bash ssh-baru.sh
 wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
 VPN_IPSEC_PSK='hidessh' \
 VPN_USER='hidessh' \
-VPN_PASSWORD='' \
+VPN_PASSWORD='apagunanyahidup' \
 sh vpnsetup.sh
 
 
