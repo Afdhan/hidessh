@@ -3,7 +3,7 @@
 #created bye HideSSH.com and Kumpulanremaja.com
 #OS Debian 9
 
-
+apt-get update -y && apt-get upgrade -y && apt-get install wget curl -y
 #installer auto SSH, Dropbear , Stunnel, badVPN
 cd
 wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh-baru.sh
