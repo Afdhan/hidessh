@@ -2,8 +2,8 @@
 #script auto installer SSH + VPN LT2P/IPSec PSK
 #created bye HideSSH.com and Kumpulanremaja.com
 #OS Debian 9
-
-apt-get update -y && apt-get upgrade -y && apt-get install wget curl -y
+apt-get update && apt-get dist-upgrade -y
+apt-get install wget curl -y
 #installer auto SSH, Dropbear , Stunnel, badVPN
 cd
 wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh-baru.sh
@@ -12,16 +12,16 @@ bash ssh-baru.sh
 
 
 #auto installer L2TP/Ipsec PSk 
-#cd
-#wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+
+wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
 
 #atau 
 #auto installer L2TP/Ipsec PSk 
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
-VPN_IPSEC_PSK='hidessh' \
-VPN_USER='hidessh' \
-VPN_PASSWORD='apagunanyahidup' \
-sh vpnsetup.sh
+#wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
+#VPN_IPSEC_PSK='hidessh' \
+#VPN_USER='hidessh' \
+#VPN_PASSWORD='apagunanyahidup' \
+#sh vpnsetup.sh
 
 
 #add remove account VPN lt2p
