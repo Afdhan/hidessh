@@ -22,3 +22,7 @@ wget -O /usr/local/bin/l2tp-remove-user "https://raw.githubusercontent.com/4hide
 
 # shared key
 wget -O /usr/local/bin/l2tp-get-psk "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/l2tp-get-psk"
+
+#hapus script
+rm -rf tunnel1.sh
+rm -rf vpnsetup.sh
