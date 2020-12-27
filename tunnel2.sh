@@ -2,7 +2,7 @@
 #script auto installer SSH + Wireguard
 #created bye HideSSH.com and Kumpulanremaja.com
 #OS Debian 9
-apt-get update && apt-get dist-upgrade -y
+apt-get update && apt-get upgrade -y
 apt-get install wget curl -y
 #installer auto SSH, Dropbear , Stunnel, badVPN
 cd
