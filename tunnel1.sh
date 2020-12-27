@@ -12,16 +12,16 @@ bash ssh-baru.sh
 
 
 #auto installer L2TP/Ipsec PSk 
-cd
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+#cd
+#wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
 
 #atau 
 #auto installer L2TP/Ipsec PSk 
-#wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
-#VPN_IPSEC_PSK='hidessh' \
-#VPN_USER='hidessh' \
-#VPN_PASSWORD='' \
-#sh vpnsetup.sh
+wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
+VPN_IPSEC_PSK='hidessh' \
+VPN_USER='hidessh' \
+VPN_PASSWORD='' \
+sh vpnsetup.sh
 
 
 #add remove account VPN lt2p
