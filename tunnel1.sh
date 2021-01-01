@@ -53,4 +53,5 @@ rm -rf tunnel1.sh
 rm -rf vpnsetup.sh
 
 #add dns adguard
+apt-get install resolvconf -y
 wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/dns" && chmod +x /etc/resolvconf/resolv.conf.d/head
