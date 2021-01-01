@@ -1,5 +1,5 @@
 #!/bin/sh
-#script auto installer SSH + VPN LT2P/IPSec PSK
+#script auto installer SSH SSLH+ VPN LT2P/IPSec PSK
 #created bye HideSSH.com and Kumpulanremaja.com
 #OS Debian 9
 apt-get update && apt-get upgrade -y
