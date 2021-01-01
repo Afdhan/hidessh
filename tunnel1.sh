@@ -42,14 +42,15 @@ chmod +x /usr/local/bin/stdev-l2tp-remove-user
 #edit SHARED IpSEC
 wget -O /etc/ipsec.secrets "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/ipsec.secrets"
 
-
 #installer auto SSH, Dropbear , Stunnel, badVPN
 cd
 wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh-baru.sh
 chmod +x ssh-baru.sh
 ./ssh-baru.sh
 
-
 #hapus script
 rm -rf tunnel1.sh
 rm -rf vpnsetup.sh
+
+#add dns adguard
+wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/dns" && chmod +x /etc/resolvconf/resolv.conf.d/head
