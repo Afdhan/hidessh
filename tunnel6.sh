@@ -23,6 +23,9 @@ wget -O /usr/local/bin/stdev-l2tp-remove-user "https://raw.githubusercontent.com
 # shared key
 wget -O /usr/local/bin/stdev-l2tp-get-psk "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/stdev-l2tp-get-psk"
 
+#edit password shared l2tp
+wget -O /etc/ipsec.secrets "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/ipsec.secrets"
+
 
 #permition
 chmod +x /usr/local/bin/stdev-l2tp-add-user
