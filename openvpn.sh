@@ -338,8 +338,6 @@ iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o ens3 -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o ens3 -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o ens3 -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
-iptables -A POSTROUTING -t nat -j MASQUERADE
-
 
 iptables-save > /etc/iptables/rules.v4
 chmod +x /etc/iptables/rules.v4
