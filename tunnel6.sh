@@ -10,8 +10,7 @@ apt-get update && apt-get upgrade -y
 #package tambahan
 echo "================  install Package Tambahan Penting Lain nya ======================"
 apt-get -y install wget curl gcc 
-apt-get -y install cmake screen unzip curl unrar
-apt-get -y install make
+
 
 #auto installer L2TP/Ipsec PSk 
 echo "=================  Auto installer L2TP/Ipsec ======================"
@@ -61,6 +60,11 @@ sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 cd
 # set time GMT +7 jakarta
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+# set locale SSH
+echo "=================  Update Package tambahan ======================"
+apt-get -y install cmake screen unzip curl unrar
+apt-get -y install make
 
 # set locale SSH
 echo "=================  Setting Port SSH ======================"
