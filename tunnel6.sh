@@ -4,6 +4,7 @@
 #OS Debian 9
 
 #update dan upgrade
+echo "================= Update dan upgrade VPS ======================"
 apt-get update && apt-get upgrade -y
 
 #package tambahan
@@ -11,7 +12,7 @@ echo "================  install Package Tambahan Penting Lain nya ==============
 apt-get -y install wget curl gcc make cmake screen unzip curl unrar
 
 #auto installer L2TP/Ipsec PSk 
-
+echo "=================  Auto installer L2TP/Ipsec ======================"
 wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
 
 #add remove account VPN lt2p
@@ -51,6 +52,7 @@ email=admin@hidessh.com
 
 cd
 # disable ipv6
+echo "=================  Disable IPv6 ======================"
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 
@@ -59,6 +61,7 @@ cd
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # set locale SSH
+echo "=================  Setting Port SSH ======================"
 cd
 sed -i 's/#Port 22/Port 22/g' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port 80' /etc/ssh/sshd_config
@@ -82,6 +85,7 @@ echo "=================  install Squid3  ======================"
 echo "========================================================="
 
 # setting dan install vnstat debian 9 64bit
+echo "=================  Penggunaan Bandhwite ======================"
 apt-get -y install vnstat
 systemctl start vnstat
 systemctl enable vnstat
@@ -131,6 +135,20 @@ cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 /etc/init.d/stunnel4 restart
 
+#install Dns Server
+echo "=================  DNS Server ======================"
+apt-get install resolvconf -y
+wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/dns" && chmod +x /etc/resolvconf/resolv.conf.d/head
+
+
+#install sslh
+echo "=================  Install Multi Port ======================"
+apt-get install sslh
+
+#konfigurasi
+wget -O /etc/default/sslh "https://raw.githubusercontent.com/idtunnel/sslh/master/sslh-conf"
+service sslh restart
+
 cd
 # common password debian 
 wget -O /etc/pam.d/common-password "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
@@ -141,8 +159,7 @@ echo "========================================================="
 
 
 cd
-# buat directory badvpn
-echo "================= Auto Installer Disable badVPN V 3  ======================"
+
 # buat directory badvpn
 cd /usr/bin
 mkdir build
@@ -154,10 +171,10 @@ cmake -DBUILD_NOTHING_BY_DEFAULT=1 -DBUILD_TUN2SOCKS=1 -DBUILD_UDPGW=1
 make install
 make -i install
 
+cd
 # auto start badvpn single port
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000 --max-connections-for-client 10' /etc/rc.local
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500 --max-connections-for-client 20 &
-cd
 
 # permition
 chmod +x /usr/local/bin/badvpn-udpgw
@@ -249,14 +266,10 @@ chmod +x delete
 # autoreboot 12 jam
 
 echo "================  Auto Reboot ======================"
-#echo "0 0 * * * root service dropbear restart" > /etc/cron.d/dropbear
-#echo "0 0 * * * root service ssh restart" > /etc/cron.d/ssh
-#echo "0 0 * * * root service stunnel4 restart" > /etc/cron.d/stunnel4
 echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
 
 #finishing
 chown -R www-data:www-data /home/vps/public_html
-
 
 # info
 clear
@@ -283,4 +296,8 @@ echo "speedtest : Speedtest VPS"  | tee -a log-install.txt
 echo "info      : Menampilkan Informasi Sistem"  | tee -a log-install.txt
 echo "delete    : auto Delete user expired"  | tee -a log-install.txt
 echo "about     : Informasi tentang script auto install"  | tee -a log-install.txt
-----------------------------
+
+
+#hapus auto installer l2tp/SSH
+rm -rf tunnel6.sh
+
