@@ -14,7 +14,7 @@ apt-get -y install wget curl gcc
 
 #auto installer L2TP/Ipsec PSk 
 echo "=================  Auto installer L2TP/Ipsec ======================"
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+wget https://raw.githubusercontent.com/hwdsl2/setup-ipsec-vpn/master/vpnsetup.sh && chmod +x vpnsetup.sh &&  sh vpnsetup.sh
 
 #add remove account VPN lt2p
 wget -O /usr/local/bin/stdev-l2tp-add-user "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/stdev-l2tp-add-user"
