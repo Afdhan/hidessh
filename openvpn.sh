@@ -84,8 +84,8 @@ username-as-common-name
 server 10.5.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -109,8 +109,8 @@ username-as-common-name
 server 10.6.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -134,8 +134,8 @@ username-as-common-name
 server 10.7.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -159,8 +159,8 @@ username-as-common-name
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -358,12 +358,8 @@ systemctl start openvpn
 
 
 # set iptables tambahan
-iptables -F -t nat
-iptables -X -t nat
 iptables -A POSTROUTING -t nat -j MASQUERADE
 iptables-save > /etc/iptables-opvpn.conf
-
-
 
 
 # Restore iptables
