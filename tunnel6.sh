@@ -65,11 +65,6 @@ cd
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # set locale SSH
-echo "=================  Update Package tambahan ======================"
-apt-get -y install cmake screen unzip curl unrar
-apt-get -y install make
-
-# set locale SSH
 echo "=================  Setting Port SSH ======================"
 cd
 sed -i 's/#Port 22/Port 22/g' /etc/ssh/sshd_config
@@ -163,8 +158,18 @@ cd
 wget -O /etc/pam.d/common-password "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
 chmod +x /etc/pam.d/common-password
 
-echo "=================  Install badVPn (VC and Game) ======================"
-echo "========================================================="
+cd
+echo "================  install Package Tambahan Penting Lain nya ======================"
+apt-get -y install gcc
+apt-get -y install make
+apt-get install cmake -y
+apt-get -y install git
+apt-get -y install wget
+apt-get -y install screen
+apt-get -y install unzip
+apt-get -y install curl
+apt-get -y install unrar
+
 
 
 cd
