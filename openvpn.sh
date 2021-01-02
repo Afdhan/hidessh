@@ -11,9 +11,10 @@ MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 sudo apt -y install ca-certificates apt-transport-https
-wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
-echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
+#wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
+#echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
 
+sudo apt update -y
 
 # install webserver
 cd
