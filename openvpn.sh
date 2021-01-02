@@ -11,10 +11,13 @@ MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 sudo apt -y install ca-certificates apt-transport-https
-#wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
-#echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
+wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
+echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
 
 sudo apt update -y
+sudo apt install php5.6 -y
+sudo apt install php5.6-mcrypt php5.6-mysql php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysqlnd php5.6-xml -y
+
 
 # install webserver
 cd
@@ -30,6 +33,7 @@ wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/idtunnel/s
 
 # Install OpenVPN dan Easy-RSA
 apt install openvpn easy-rsa -y
+apt install openssl iptables -y 
 
 # copykan script generate Easy-RSA ke direktori OpenVPN
 cp -r /usr/share/easy-rsa/ /etc/openvpn
@@ -63,7 +67,7 @@ echo "unique_subject = no" >> keys/index.txt.attr
 ./build-ca
 
 # buat server key name yang telah kita buat sebelum nya yakni "white-vps"
-./build-key-server white-vps
+./build-key-server hidessh
 
 # generate ta.key
 openvpn --genkey --secret keys/ta.key
@@ -76,8 +80,8 @@ port 1194
 proto udp
 dev tun
 ca easy-rsa/keys/ca.crt
-cert easy-rsa/keys/white-vps.crt
-key easy-rsa/keys/white-vps.key
+cert easy-rsa/keys/hidessh.crt
+key easy-rsa/keys/hidessh.key
 dh dh2048.pem
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
@@ -101,8 +105,8 @@ port 1194
 proto tcp
 dev tun
 ca easy-rsa/keys/ca.crt
-cert easy-rsa/keys/white-vps.crt
-key easy-rsa/keys/white-vps.key
+cert easy-rsa/keys/hidessh.crt
+key easy-rsa/keys/hidessh.key
 dh dh2048.pem
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
@@ -126,8 +130,8 @@ port 2200
 proto udp
 dev tun
 ca easy-rsa/keys/ca.crt
-cert easy-rsa/keys/white-vps.crt
-key easy-rsa/keys/white-vps.key
+cert easy-rsa/keys/hidessh.crt
+key easy-rsa/keys/hidessh.key
 dh dh2048.pem
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
@@ -151,8 +155,8 @@ port 2200
 proto tcp
 dev tun
 ca easy-rsa/keys/ca.crt
-cert easy-rsa/keys/white-vps.crt
-key easy-rsa/keys/white-vps.key
+cert easy-rsa/keys/whidessh.crt
+key easy-rsa/keys/hidessh.key
 dh dh2048.pem
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
@@ -172,7 +176,7 @@ END
 
 cd
 
-cp /etc/openvpn/easy-rsa/keys/{white-vps.crt,white-vps.key,ca.crt,ta.key} /etc/openvpn
+cp /etc/openvpn/easy-rsa/keys/{hidessh.crt,hidessh.key,ca.crt,ta.key} /etc/openvpn
 ls /etc/openvpn
 
 # nano /etc/default/openvpn
@@ -192,7 +196,7 @@ sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
 # Konfigurasi dan Setting untuk Client
 mkdir clientconfig
-cp /etc/openvpn/easy-rsa/keys/{white-vps.crt,white-vps.key,ca.crt,ta.key} clientconfig/
+cp /etc/openvpn/easy-rsa/keys/{hidessh.crt,hidessh.key,ca.crt,ta.key} clientconfig/
 cd clientconfig
 
 # Buat config client UDP 1194
@@ -322,8 +326,6 @@ cp /etc/openvpn/client-tcp-2200.ovpn /home/vps/public_html/client-tcp-2200.ovpn
 # Copy config OpenVPN client ke home directory root agar mudah didownload ( UDP 2200 )
 cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
-
-
 iptables -P FORWARD ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o eth0 -j MASQUERADE
@@ -353,9 +355,6 @@ systemctl enable openvpn
 systemctl start openvpn
 /etc/init.d/openvpn restart
 
-
-
-
 # set iptables tambahan
 iptables -A POSTROUTING -t nat -j MASQUERADE
 iptables-save > /etc/iptables-opvpn.conf
@@ -365,7 +364,49 @@ iptables-save > /etc/iptables-opvpn.conf
 wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/iptables-local"
 chmod +x /etc/network/if-up.d/iptables
 
+# install squid3
+cd
+apt-get -y install squid3
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/squid3.conf"
+sed -i $MYIP2 /etc/squid/squid.conf;
+/etc/init.d/squid restart
+
+
+
+# download script
+cd /usr/bin
+wget -O menu "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/menu.sh"
+wget -O usernew "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/usernew.sh"
+wget -O trial "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/trial.sh"
+wget -O hapus "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/hapus.sh"
+wget -O cek "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/user-login.sh"
+wget -O member "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/user-list.sh"
+wget -O jurus69 "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/restart.sh"
+wget -O speedtest "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/speedtest_cli.py"
+wget -O info "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/info.sh"
+wget -O about "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/about.sh"
+wget -O delete "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/delete.sh"
+
+echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
+
+chmod +x menu
+chmod +x usernew
+chmod +x trial
+chmod +x hapus
+chmod +x cek
+chmod +x member
+chmod +x jurus69
+chmod +x speedtest
+chmod +x info
+chmod +x about
+chmod +x delete
+
 # restart opevpn
 /etc/init.d/openvpn restart
+
+#auto delete
+wget -O /usr/local/bin/userdelexpired "https://www.dropbox.com/s/cwe64ztqk8w622u/userdelexpired?dl=1" && chmod +x /usr/local/bin/userdelexpired
+
+
 
 
