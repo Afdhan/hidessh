@@ -9,7 +9,8 @@ apt-get update && apt-get upgrade -y
 
 #package tambahan
 echo "================  install Package Tambahan Penting Lain nya ======================"
-apt-get -y install wget curl gcc make cmake screen unzip curl unrar
+apt-get -y install wget curl gcc 
+apt-get -y install cmake screen unzip curl unrar
 
 #auto installer L2TP/Ipsec PSk 
 echo "=================  Auto installer L2TP/Ipsec ======================"
