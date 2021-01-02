@@ -143,7 +143,7 @@ wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4h
 
 #install sslh
 echo "=================  Install Multi Port ======================"
-apt-get install sslh
+apt-get install sslh -y
 
 #konfigurasi
 wget -O /etc/default/sslh "https://raw.githubusercontent.com/idtunnel/sslh/master/sslh-conf"
