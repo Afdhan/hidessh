@@ -346,6 +346,7 @@ service ip6tables save
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.9.0.0/24 -o $ifes -j MASQUERADE
+service iptables save
 
 #iptables save
 netfilter-persistent save
@@ -357,13 +358,13 @@ systemctl start openvpn
 /etc/init.d/openvpn restart
 
 # set iptables tambahan
-iptables -A POSTROUTING -t nat -j MASQUERADE
-iptables-save > /etc/iptables-opvpn.conf
+#iptables -A POSTROUTING -t nat -j MASQUERADE
+#iptables-save > /etc/iptables-opvpn.conf
 
 
 # Restore iptables
-wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/iptables-local"
-chmod +x /etc/network/if-up.d/iptables
+#wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/iptables-local"
+#chmod +x /etc/network/if-up.d/iptables
 
 # install squid3
 cd
