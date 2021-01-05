@@ -341,11 +341,16 @@ iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -j MASQUERADE
 
 #iptables save
 iptables-restore -t < /etc/iptables/rules.v4
 netfilter-persistent save
 netfilter-persistent reload
+iptables-persistent save
+
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
 # Restart service openvpn
 systemctl enable openvpn
