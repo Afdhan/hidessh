@@ -43,9 +43,7 @@ mkdir /etc/openvpn/easy-rsa/keys
 
 # Kemudian edit file variabel easy-rsa
 # nano /etc/openvpn/easy-rsa/vars
-wget -O /etc/openvpn/easy-rsa/vars "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/vars.conf"
-# edit projek export KEY_NAME="white-vps"
-# Save dan keluar dari editor
+wget -O /etc/openvpn/easy-rsa/vars "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/openvpn-conf.sh"
 
 # generate Diffie hellman parameters
 openssl dhparam -out /etc/openvpn/dh2048.pem 2048
