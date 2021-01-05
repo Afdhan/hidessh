@@ -344,9 +344,6 @@ ip6tables -t nat -F
 ip6tables -t nat -X
 ip6tables -t mangle -F
 ip6tables -t mangle -X
-service iptables save
-service ip6tables save
-
 
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
