@@ -336,20 +336,14 @@ iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 
-
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
 
-iptables-save > /etc/iptables/openvpn-baru
-chmod +x /etc/iptables/openvpn-baru
-
-#sysctl -w net.ipv4.ip_forward=1
-#sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-
 #iptables save
+iptables-restore -t < /etc/iptables/rules.v4
 netfilter-persistent save
 netfilter-persistent reload
 
@@ -358,14 +352,7 @@ systemctl enable openvpn
 systemctl start openvpn
 /etc/init.d/openvpn restart
 
-# set iptables tambahan
-#iptables -A POSTROUTING -t nat -j MASQUERADE
-#iptables-save > /etc/iptables-opvpn.conf
 
-
-# Restore iptables
-#wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/iptables-local"
-#chmod +x /etc/network/if-up.d/iptables
 
 # install squid3
 cd
