@@ -326,28 +326,45 @@ cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
 
 #Reset iptables
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
 iptables -F
 iptables -X
 iptables -t nat -F
 iptables -t nat -X
 iptables -t mangle -F
 iptables -t mangle -X
-iptables -P INPUT ACCEPT
-iptables -P OUTPUT ACCEPT
-iptables -P FORWARD ACCEPT
+ip6tables -P INPUT ACCEPT
+ip6tables -P OUTPUT ACCEPT
+ip6tables -P FORWARD ACCEPT
+ip6tables -F
+ip6tables -X
+ip6tables -t nat -F
+ip6tables -t nat -X
+ip6tables -t mangle -F
+ip6tables -t mangle -X
+service iptables save
+service ip6tables save
+
 
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE		
+
+iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p tcp --dport 2200 -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p udp --dport 2200 -j ACCEPT
+
+
 
 #iptables save
 iptables-restore -t < /etc/iptables/rules.v4
 netfilter-persistent save
 netfilter-persistent reload
-iptables-persistent save
 
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
