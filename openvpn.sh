@@ -10,13 +10,9 @@ OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
-sudo apt -y install ca-certificates apt-transport-https
-wget -q https://packages.sury.org/php/apt.gpg -O- | sudo apt-key add -
-echo "deb https://packages.sury.org/php/ stretch main" | sudo tee /etc/apt/sources.list.d/php.list
-
+#update dan upgrade 
 sudo apt update -y
-#sudo apt install php5.6 -y
-#sudo apt install php5.6-mcrypt php5.6-mysql php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysqlnd php5.6-xml -y
+sudo apt upgrade -y
 
 
 # install webserver
@@ -30,8 +26,9 @@ wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/idtunnel/s
 
 
 # Install OpenVPN dan Easy-RSA
-apt install openvpn easy-rsa -y
-apt install openssl iptables -y 
+apt-get install -y ca-certificates
+apt-get -y install openvpn easy-rsa openssl
+apt-get -y install iptables-persistent
 
 # copykan script generate Easy-RSA ke direktori OpenVPN
 cp -r /usr/share/easy-rsa/ /etc/openvpn
@@ -85,8 +82,8 @@ username-as-common-name
 server 10.5.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -110,8 +107,8 @@ username-as-common-name
 server 10.6.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -135,8 +132,8 @@ username-as-common-name
 server 10.7.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -160,8 +157,8 @@ username-as-common-name
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway def1"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 5 30
 comp-lzo
 persist-key
@@ -322,33 +319,34 @@ cp /etc/openvpn/client-tcp-2200.ovpn /home/vps/public_html/client-tcp-2200.ovpn
 # Copy config OpenVPN client ke home directory root agar mudah didownload ( UDP 2200 )
 cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
-iptables -P FORWARD ACCEPT
+
+#Reset iptables
+iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
-iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+iptables -P FORWARD ACCEPT
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+ip6tables -P INPUT ACCEPT
+ip6tables -P OUTPUT ACCEPT
+ip6tables -P FORWARD ACCEPT
+ip6tables -F
+ip6tables -X
+ip6tables -t nat -F
+ip6tables -t nat -X
+ip6tables -t mangle -F
+ip6tables -t mangle -X
+service iptables save
+service ip6tables save
 
-iptables -A INPUT -i eth0 -m state --state NEW -p tcp --dport 3306 -j ACCEPT
-iptables -A INPUT -i eth0 -m state --state NEW -p tcp --dport 7300 -j ACCEPT
-iptables -A INPUT -i eth0 -m state --state NEW -p udp --dport 7300 -j ACCEPT
+ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 10.9.0.0/24 -o $ifes -j MASQUERADE
 
-iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o ens3 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o ens3 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o ens3 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o ens3 -j MASQUERADE
-
-#installer Google Cloud Platfrom
-iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o ens4 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o ens4 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o ens4 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o ens4 -j MASQUERADE
-
-iptables-save > /etc/iptables/rules.v4
-chmod +x /etc/iptables/rules.v4
-
-# Reload IPTables
-iptables-restore -t < /etc/iptables/rules.v4
+#iptables save
 netfilter-persistent save
 netfilter-persistent reload
 
