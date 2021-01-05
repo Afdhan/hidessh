@@ -4,6 +4,10 @@
 # Mod by admin Hidessh
 # ==================================================
 
+# disable ipv6
+echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+
 # initialisasi var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
@@ -322,31 +326,28 @@ cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
 
 #Reset iptables
-iptables -P INPUT ACCEPT
-iptables -P OUTPUT ACCEPT
-iptables -P FORWARD ACCEPT
 iptables -F
 iptables -X
 iptables -t nat -F
 iptables -t nat -X
 iptables -t mangle -F
 iptables -t mangle -X
-ip6tables -P INPUT ACCEPT
-ip6tables -P OUTPUT ACCEPT
-ip6tables -P FORWARD ACCEPT
-ip6tables -F
-ip6tables -X
-ip6tables -t nat -F
-ip6tables -t nat -X
-ip6tables -t mangle -F
-ip6tables -t mangle -X
-service iptables save
-service ip6tables save
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+
 
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.9.0.0/24 -o $ifes -j MASQUERADE
-service iptables save
+
+iptables-save > /etc/iptables/openvpn-baru
+chmod +x /etc/iptables/openvpn-baru
+
+#sysctl -w net.ipv4.ip_forward=1
+#sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
 #iptables save
 netfilter-persistent save
