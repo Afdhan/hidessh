@@ -363,8 +363,8 @@ iptables-restore -t < /etc/iptables/rules.v4
 netfilter-persistent save
 netfilter-persistent reload
 
-sysctl -w net.ipv4.ip_forward=1
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+#sysctl -w net.ipv4.ip_forward=1
+#sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
 # Restart service openvpn
 systemctl enable openvpn
