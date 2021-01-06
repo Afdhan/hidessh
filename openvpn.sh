@@ -329,45 +329,38 @@ cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
-iptables -F
-iptables -X
-iptables -t nat -F
-iptables -t nat -X
-iptables -t mangle -F
-iptables -t mangle -X
-ip6tables -P INPUT ACCEPT
-ip6tables -P OUTPUT ACCEPT
-ip6tables -P FORWARD ACCEPT
-ip6tables -F
-ip6tables -X
-ip6tables -t nat -F
-ip6tables -t nat -X
-ip6tables -t mangle -F
-ip6tables -t mangle -X
+
 
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
-iptables -t nat -I POSTROUTING -s 10.5.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.6.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.7.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 10.8.0.0/24 -o $ifes -j MASQUERADE		
+IPCIDR='10.5.0.0/24'
+IPCIDR2='10.6.0.0/24'
+IPCIDR3='10.7.0.0/24'
+IPCIDR4='10.8.0.0/24'
 
-iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p tcp --dport 2200 -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p udp --dport 2200 -j ACCEPT
 
+iptables -I FORWARD -s $IPCIDR -j ACCEPT
+iptables -I FORWARD -s $IPCIDR2 -j ACCEPT
+iptables -I FORWARD -s $IPCIDR3 -j ACCEPT
+iptables -I FORWARD -s $IPCIDR4 -j ACCEPT
+
+iptables -t nat -A POSTROUTING -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -s $IPCIDR -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -s $IPCIDR2 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -s $IPCIDR3 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -s $IPCIDR4 -o $ifes -j MASQUERADE
 
 
 #iptables save
-iptables-restore -t < /etc/iptables/rules.v4
 netfilter-persistent save
 netfilter-persistent reload
 
 #sysctl -w net.ipv4.ip_forward=1
-#sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
+ # Enabling IPv4 Forwarding
+ echo 1 > /proc/sys/net/ipv4/ip_forward
+ 
 # Restart service openvpn
-systemctl enable openvpn
+systemctl enable openvpn/
 systemctl start openvpn
 /etc/init.d/openvpn restart
 
@@ -410,8 +403,6 @@ chmod +x info
 chmod +x about
 chmod +x delete
 
-# restart opevpn
-/etc/init.d/openvpn restart
 
 #auto delete
 wget -O /usr/local/bin/userdelexpired "https://www.dropbox.com/s/cwe64ztqk8w622u/userdelexpired?dl=1" && chmod +x /usr/local/bin/userdelexpired
@@ -419,3 +410,7 @@ wget -O /usr/local/bin/userdelexpired "https://www.dropbox.com/s/cwe64ztqk8w622u
 
 
 
+ systemctl start openvpn@server_tcp
+ systemctl enable openvpn@server_tcp
+ systemctl start openvpn@server_udp
+ systemctl enable openvpn@server_udp
