@@ -15,9 +15,25 @@ MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 #update dan upgrade 
-sudo apt update -y
-sudo apt upgrade -y
+apt update -y
+apt upgrade -y
 
+ # Installing some important machine essentials
+ apt-get install nano wget curl zip unzip tar gzip p7zip-full bc rc openssl cron net-tools dnsutils dos2unix screen bzip2 ccrypt -y
+ 
+ # Now installing all our wanted services
+ apt-get install dropbear stunnel4 privoxy ca-certificates nginx ruby apt-transport-https lsb-release squid -y
+
+ # Installing all required packages to install Webmin
+ apt-get install perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python dbus libxml-parser-perl -y
+ apt-get install shared-mime-info jq fail2ban -y
+
+ # Installing OpenVPN by pulling its repository inside sources.list file 
+ rm -rf /etc/apt/sources.list.d/openvpn*
+ echo "deb http://build.openvpn.net/debian/openvpn/stable $(lsb_release -sc) main" > /etc/apt/sources.list.d/openvpn.list
+ wget -qO - http://build.openvpn.net/debian/openvpn/stable/pubkey.gpg|apt-key add -
+ apt-get update
+ apt-get install openvpn -y
 
 # install webserver
 cd
@@ -31,8 +47,6 @@ wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/idtunnel/s
 
 
 # Install OpenVPN dan Easy-RSA
-apt-get install -y ca-certificates
-apt-get -y install openvpn easy-rsa openssl
 apt-get -y install iptables-persistent
 
 # copykan script generate Easy-RSA ke direktori OpenVPN
