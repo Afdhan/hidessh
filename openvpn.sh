@@ -324,6 +324,12 @@ cp /etc/openvpn/client-tcp-2200.ovpn /home/vps/public_html/client-tcp-2200.ovpn
 # Copy config OpenVPN client ke home directory root agar mudah didownload ( UDP 2200 )
 cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
+ # Allow IPv4 Forwarding
+ sed -i '/net.ipv4.ip_forward.*/d' /etc/sysctl.conf
+ sed -i '/net.ipv4.ip_forward.*/d' /etc/sysctl.d/*.conf
+ echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/20-openvpn.conf
+ sysctl --system &> /dev/null
+
 
 #Reset iptables
 iptables -P INPUT ACCEPT
