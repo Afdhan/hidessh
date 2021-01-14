@@ -325,10 +325,8 @@ cp /etc/openvpn/client-tcp-2200.ovpn /home/vps/public_html/client-tcp-2200.ovpn
 cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
  # Allow IPv4 Forwarding
- sed -i '/net.ipv4.ip_forward.*/d' /etc/sysctl.conf
- sed -i '/net.ipv4.ip_forward.*/d' /etc/sysctl.d/*.conf
- echo 'net.ipv4.ip_forward=1' > /etc/sysctl.d/20-openvpn.conf
- sysctl --system &> /dev/null
+ echo 1 > /proc/sys/net/ipv4/ip_forward
+sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
 
 
 #Reset iptables
@@ -349,6 +347,8 @@ iptables -I FORWARD -s $IPCIDR2 -j ACCEPT
 iptables -I FORWARD -s $IPCIDR3 -j ACCEPT
 iptables -I FORWARD -s $IPCIDR4 -j ACCEPT
 
+iptables -A POSTROUTING -j SNAT --to-source xxxxxxxxx
+
 iptables -t nat -A POSTROUTING -o $ifes -j MASQUERADE
 iptables -t nat -A POSTROUTING -s $IPCIDR -o $ifes -j MASQUERADE
 iptables -t nat -A POSTROUTING -s $IPCIDR2 -o $ifes -j MASQUERADE
@@ -360,10 +360,6 @@ iptables -t nat -A POSTROUTING -s $IPCIDR4 -o $ifes -j MASQUERADE
 netfilter-persistent save
 netfilter-persistent reload
 
-#sysctl -w net.ipv4.ip_forward=1
-
- # Enabling IPv4 Forwarding
- echo 1 > /proc/sys/net/ipv4/ip_forward
  
 # Restart service openvpn
 systemctl enable openvpn/
@@ -372,51 +368,4 @@ systemctl start openvpn
 
 
 
-# install squid3
-cd
-apt-get -y install squid3
-wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/squid3.conf"
-sed -i $MYIP2 /etc/squid/squid.conf;
-/etc/init.d/squid restart
 
-
-
-# download script
-cd /usr/bin
-wget -O menu "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/menu.sh"
-wget -O usernew "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/usernew.sh"
-wget -O trial "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/trial.sh"
-wget -O hapus "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/hapus.sh"
-wget -O cek "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/user-login.sh"
-wget -O member "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/user-list.sh"
-wget -O jurus69 "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/restart.sh"
-wget -O speedtest "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/speedtest_cli.py"
-wget -O info "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/info.sh"
-wget -O about "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/about.sh"
-wget -O delete "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/delete.sh"
-
-echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
-
-chmod +x menu
-chmod +x usernew
-chmod +x trial
-chmod +x hapus
-chmod +x cek
-chmod +x member
-chmod +x jurus69
-chmod +x speedtest
-chmod +x info
-chmod +x about
-chmod +x delete
-
-
-#auto delete
-wget -O /usr/local/bin/userdelexpired "https://www.dropbox.com/s/cwe64ztqk8w622u/userdelexpired?dl=1" && chmod +x /usr/local/bin/userdelexpired
-
-
-
-
- systemctl start openvpn@server_tcp
- systemctl enable openvpn@server_tcp
- systemctl start openvpn@server_udp
- systemctl enable openvpn@server_udp
