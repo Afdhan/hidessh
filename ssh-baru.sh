@@ -11,7 +11,7 @@ apt-get -y install make
 apt-get install cmake -y
 apt-get -y install git
 apt-get -y install wget
-apt-get -y install screen
+apt-get install screen -y
 apt-get -y install unzip
 apt-get -y install curl
 apt-get -y install unrar
