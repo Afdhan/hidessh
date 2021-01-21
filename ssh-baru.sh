@@ -182,10 +182,12 @@ cmake -DBUILD_NOTHING_BY_DEFAULT=1 -DBUILD_TUN2SOCKS=1 -DBUILD_UDPGW=1
 make install
 make -i install
 
+cd
 # auto start badvpn single port
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000 --max-connections-for-client 10' /etc/rc.local
 screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500 --max-connections-for-client 20 
 
+cd
 # permition
 chmod +x /usr/local/bin/badvpn-udpgw
 chmod +x /usr/local/share/man/man7/badvpn.7
