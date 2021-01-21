@@ -5,11 +5,20 @@
 echo "================  Auto deleted Account Expired ======================"
 wget -O /usr/local/bin/userdelexpired "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/userdelexpired" && chmod +x /usr/local/bin/userdelexpired
 
-# initialisasi var
-export DEBIAN_FRONTEND=noninteractive
-OS=`uname -m`;
-MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0'`;
-MYIP2="s/xxxxxxxxx/$MYIP/g";
+
+# nano /etc/rc.local
+cat > /etc/rc.local <<-END
+#!/bin/sh -e
+# rc.local
+# By default this script does nothing.
+exit 0
+END
+
+# Ubah izin akses
+chmod +x /etc/rc.local
+
+# enable rc local
+systemctl enable rc-local
 
 # detail nama perusahaan
 country=ID
@@ -45,7 +54,11 @@ echo "/usr/sbin/nologin" >> /etc/shells
 /etc/init.d/ssh restart
 /etc/init.d/dropbear restart
 
-
+# initialisasi var
+export DEBIAN_FRONTEND=noninteractive
+OS=`uname -m`;
+MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0'`;
+MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
@@ -146,7 +159,29 @@ echo; echo 'Installation has completed.'
 echo 'Config file is at /usr/local/ddos/ddos.conf'
 echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
+echo "================= Auto Installer Disable badVPN V 3  ======================"
+# buat directory badvpn
+cd /usr/bin
+mkdir build
+cd build
+wget https://github.com/ambrop72/badvpn/archive/1.999.130.tar.gz
+tar xvzf 1.999.130.tar.gz
+cd badvpn-1.999.130
+cmake -DBUILD_NOTHING_BY_DEFAULT=1 -DBUILD_TUN2SOCKS=1 -DBUILD_UDPGW=1
+make install
+make -i install
 
+# auto start badvpn single port
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 1000 --max-connections-for-client 10' /etc/rc.local
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500 --max-connections-for-client 20 
+
+# permition
+chmod +x /usr/local/bin/badvpn-udpgw
+chmod +x /usr/local/share/man/man7/badvpn.7
+chmod +x /usr/local/bin/badvpn-tun2socks
+chmod +x /usr/local/share/man/man8/badvpn-tun2socks.8
+chmod +x /usr/bin/build
+chmod +x /etc/rc.local
 
 # autoreboot 12 jam
 
