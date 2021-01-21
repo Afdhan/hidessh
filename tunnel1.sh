@@ -55,3 +55,14 @@ rm -rf vpnsetup.sh
 #add dns adguard
 apt-get install resolvconf -y
 wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/dns" && chmod +x /etc/resolvconf/resolv.conf.d/head
+
+
+cd
+# iptables-persistent
+echo "================  Firewall ======================"
+apt install iptables-persistent -y
+wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/firewall-torent && chmod +x firewall-torent && ./firewall-torent
+netfilter-persistent save
+netfilter-persistent reload 
+
+
