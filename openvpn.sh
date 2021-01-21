@@ -4,9 +4,6 @@
 # Mod by admin Hidessh
 # ==================================================
 
-# disable ipv6
-echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
-
 
 # initialisasi var
 export DEBIAN_FRONTEND=noninteractive
@@ -31,7 +28,7 @@ wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/idtunnel/s
 
 
 # Install OpenVPN dan Easy-RSA
-apt install openvpn easy-rsa -y
+apt install openvpn
 apt install openssl iptables -y 
 
 
@@ -325,7 +322,7 @@ cp /etc/openvpn/client-tcp-2200.ovpn /home/vps/public_html/client-tcp-2200.ovpn
 cp /etc/openvpn/client-udp-2200.ovpn /home/vps/public_html/client-udp-2200.ovpn
 
  # Allow IPv4 Forwarding
- echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 > /proc/sys/net/ipv4/ip_forward
 sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
 
 
@@ -334,26 +331,17 @@ iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 
-
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 IPCIDR='10.5.0.0/24'
 IPCIDR2='10.6.0.0/24'
 IPCIDR3='10.7.0.0/24'
 IPCIDR4='10.8.0.0/24'
 
-
-iptables -I FORWARD -s $IPCIDR -j ACCEPT
-iptables -I FORWARD -s $IPCIDR2 -j ACCEPT
-iptables -I FORWARD -s $IPCIDR3 -j ACCEPT
-iptables -I FORWARD -s $IPCIDR4 -j ACCEPT
-
-iptables -A POSTROUTING -j SNAT --to-source xxxxxxxxx
-
 iptables -t nat -A POSTROUTING -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -s $IPCIDR -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -s $IPCIDR2 -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -s $IPCIDR3 -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -s $IPCIDR4 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING $IPCIDR -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING $IPCIDR2 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING $IPCIDR3 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING $IPCIDR4 -o $ifes -j MASQUERADE
 
 
 #iptables save
@@ -365,7 +353,3 @@ netfilter-persistent reload
 systemctl enable openvpn/
 systemctl start openvpn
 /etc/init.d/openvpn restart
-
-
-
-
