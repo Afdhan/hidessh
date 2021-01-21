@@ -1,5 +1,10 @@
 #auto installer SSH + Dropbear +Stunnel + SSLH Multi Port 
 
+# initializing var
+export DEBIAN_FRONTEND=noninteractive
+OS=`uname -m`;
+MYIP=$(wget -qO- ipv4.icanhazip.com);
+MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # Delete Acount SSH Expired
 echo "================  Auto deleted Account Expired ======================"
@@ -64,12 +69,6 @@ echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 /etc/init.d/ssh restart
 /etc/init.d/dropbear restart
-
-# initialisasi var
-export DEBIAN_FRONTEND=noninteractive
-OS=`uname -m`;
-MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0'`;
-MYIP2="s/xxxxxxxxx/$MYIP/g";
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
