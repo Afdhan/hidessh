@@ -5,6 +5,17 @@
 echo "================  Auto deleted Account Expired ======================"
 wget -O /usr/local/bin/userdelexpired "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/userdelexpired" && chmod +x /usr/local/bin/userdelexpired
 
+#tambahan installer 
+apt-get -y install gcc
+apt-get -y install make
+apt-get install cmake -y
+apt-get -y install git
+apt-get -y install wget
+apt-get -y install screen
+apt-get -y install unzip
+apt-get -y install curl
+apt-get -y install unrar
+
 
 # nano /etc/rc.local
 cat > /etc/rc.local <<-END
