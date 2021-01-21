@@ -22,6 +22,6 @@ apt-get update -y && apt-get upgrade -y && wget -O install-wireguard-engine "htt
 
 tambahan script 
 ************
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/wg-hidessh && chmod +x wg-hidessh  &&./wg-hidessh 
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/wg-hidessh && chmod +x wg-hidessh && ./wg-hidessh 
 ************
 ==============================================
