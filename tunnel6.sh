@@ -34,3 +34,8 @@ chmod +x /usr/local/bin/stdev-l2tp-get-psk
 
 #auto installer SSH + Dropbear +Stunnel + SSLH Multi Port 
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/ssh/lt2p && chmod +x lt2p && ./lt2p
+
+#firewall
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/torrent && chmod +x torrent && ./torrent
+netfilter-persistent save
+netfilter-persistent reload 
