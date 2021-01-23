@@ -33,7 +33,7 @@ chmod +x /usr/local/bin/stdev-l2tp-remove-user
 chmod +x /usr/local/bin/stdev-l2tp-get-psk
 
 #auto installer SSH + Dropbear +Stunnel + SSLH Multi Port 
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/ssh/lt2p && chmod +x lt2p && ./lt2p
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/ssh/lt2p.sh && chmod +x lt2p.sh && ./lt2p.sh
 
 #firewall
 apt-get -y install iptables-persistent
@@ -42,5 +42,7 @@ netfilter-persistent save
 netfilter-persistent reload 
 
 
-#hapus 
+#hapus file installer
 rm -rf tunnel6.sh
+rm -rf lt2p.sh
+rm -rf vpnsetup.sh
