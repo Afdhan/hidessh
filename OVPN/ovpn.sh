@@ -165,28 +165,31 @@ sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn@.service
 systemctl daemon-reload
 /etc/init.d/openvpn restart
 
-wget -O /etc/openvpn/client-tcp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-1194.conf"
-sed -i $MYIP2 /etc/openvpn/client-tcp-1194.conf;
-echo '<ca>' >> /etc/openvpn/client-tcp-1194.conf
-cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-1194.conf
-echo '</ca>' >> /etc/openvpn/client-tcp-1194.conf
-cp client-tcp-1194.conf /home/vps/public_html/
-wget -O /etc/openvpn/client-udp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-1194.conf"
-sed -i $MYIP2 /etc/openvpn/client-udp-1194.conf;
-echo '<ca>' >> /etc/openvpn/client-udp-1194.conf
-cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.conf
-echo '</ca>' >> /etc/openvpn/client-udp-1194.conf
-cp client-tcp-1194.conf /home/vps/public_html/
-wget -O /etc/openvpn/client-tcp-ssl.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-ssl.conf"
-echo '<ca>' >> /etc/openvpn/client-tcp-ssl.conf
-cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-ssl.conf
-echo '</ca>' >> /etc/openvpn/client-tcp-ssl.conf
-cp client-tcp-ssl.conf /home/vps/public_html/
-wget -O /etc/openvpn/client-udp-ssl.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-ssl.conf"
-echo '<ca>' >> /etc/openvpn/client-udp-ssl.conf
-cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.conf
-echo '</ca>' >> /etc/openvpn/client-udp-ssl.conf
-cp client-udp-ssl.conf /home/vps/public_html/
+wget -O /etc/openvpn/client-tcp-1194.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-1194.conf"
+sed -i $MYIP2 /etc/openvpn/client-tcp-1194.ovpn;
+echo '<ca>' >> /etc/openvpn/client-tcp-1194.ovpn
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-1194.ovpn
+echo '</ca>' >> /etc/openvpn/client-tcp-1194.ovpn
+cp client-tcp-1194.ovpn /home/vps/public_html/
+
+wget -O /etc/openvpn/client-udp-1194.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-1194.conf"
+sed -i $MYIP2 /etc/openvpn/client-udp-1194.ovpn;
+echo '<ca>' >> /etc/openvpn/client-udp-1194.ovpn
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.ovpn
+echo '</ca>' >> /etc/openvpn/client-udp-1194.ovpn
+cp client-tcp-1194.ovpn /home/vps/public_html/
+
+wget -O /etc/openvpn/client-tcp-ssl.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-ssl.conf"
+echo '<ca>' >> /etc/openvpn/client-tcp-ssl.ovpn
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-ssl.ovpn
+echo '</ca>' >> /etc/openvpn/client-tcp-ssl.ovpn
+cp client-tcp-ssl.ovpn /home/vps/public_html/
+
+wget -O /etc/openvpn/client-udp-ssl.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-ssl.conf"
+echo '<ca>' >> /etc/openvpn/client-udp-ssl.ovpn
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.ovpn
+echo '</ca>' >> /etc/openvpn/client-udp-ssl.ovpn
+cp client-udp-ssl.ovpn /home/vps/public_html/
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
