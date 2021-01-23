@@ -39,8 +39,11 @@ iptables -A INPUT -p udp --dport 10343 -j ACCEPT
 iptables -A INPUT -p udp --dport 51820 -j ACCEPT
 
 iptables -A INPUT -p tcp --dport 51820 -j ACCEPT
-
-
+#openvpn
+iptables -A INPUT -p tcp --dport 1194 -j ACCEPT
+iptables -A INPUT -p udp --dport 1194 -j ACCEPT
+iptables -A INPUT -p tcp --dport 111 -j ACCEPT
+iptables -A INPUT -p udp --dport 111 -j ACCEPT
 
 ## Try torrent name filters
 iptables -A FORWARD -m string --algo bm --string "BitTorrent" -j DROP
