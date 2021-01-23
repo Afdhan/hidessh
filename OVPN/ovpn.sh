@@ -144,7 +144,8 @@ ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
-
+netfilter-persistent save
+netfilter-persistent reload 
 iptables-save > /etc/iptables.up.rules
 wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/acillsadank/install/master/iptables"
 chmod +x /etc/network/if-up.d/iptables
@@ -312,6 +313,7 @@ chmod +x /usr/local/bin/badvpn-tun2socks
 chmod +x /usr/local/share/man/man8/badvpn-tun2socks.8
 chmod +x /usr/bin/build
 chmod +x /etc/rc.local
+
 
 # autoreboot 12 jam
 
