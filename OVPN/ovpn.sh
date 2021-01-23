@@ -340,7 +340,7 @@ chmod +x delete
 cd
 #unzip semua file 
 cd /home/vps/public_html
-zip config.zip client-tcp-1194.conf client-udp-1194.conf client-tcp-ssl.conf client-udp-ssl.conf
+zip config.zip client-tcp-1194.ovpn client-udp-1194.ovpn client-tcp-ssl.ovpn client-udp-ssl.ovpn
 
 # autoreboot 12 jam
 
