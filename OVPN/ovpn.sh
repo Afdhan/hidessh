@@ -177,7 +177,7 @@ sed -i $MYIP2 /etc/openvpn/client-udp-1194.ovpn;
 echo '<ca>' >> /etc/openvpn/client-udp-1194.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-1194.ovpn
-cp client-tcp-1194.ovpn /home/vps/public_html/
+cp client-udp-1194.ovpn /home/vps/public_html/
 
 wget -O /etc/openvpn/client-tcp-ssl.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-ssl.conf"
 echo '<ca>' >> /etc/openvpn/client-tcp-ssl.ovpn
@@ -190,6 +190,13 @@ echo '<ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cp client-udp-ssl.ovpn /home/vps/public_html/
+
+
+cd
+#unzip semua file 
+cd /home/vps/public_html
+zip config.zip client-tcp-1194.conf client-udp-1194.conf client-tcp-ssl.conf client-udp-ssl.conf
+
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
