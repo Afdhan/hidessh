@@ -1,13 +1,14 @@
 #auto installer SSH + OpenVPN + SSLH Multi Port 
 
+apt-get update -y
+apt-get upgrade -y
+
 # initializing var
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 
-apt-get update -y
-apt-get upgrade -y
 # Delete Acount SSH Expired
 echo "================  Auto deleted Account Expired ======================"
 wget -O /usr/local/bin/userdelexpired "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/userdelexpired" && chmod +x /usr/local/bin/userdelexpired
@@ -20,6 +21,7 @@ apt-get -y install git
 apt-get -y install wget
 apt-get install screen -y
 apt-get -y install unzip
+apt-get -y install zip
 apt-get -y install curl
 apt-get -y install unrar
 apt-get -y install iptables-persistent
@@ -165,38 +167,32 @@ sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn@.service
 systemctl daemon-reload
 /etc/init.d/openvpn restart
 
+#config tcp
 wget -O /etc/openvpn/client-tcp-1194.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-1194.conf"
 sed -i $MYIP2 /etc/openvpn/client-tcp-1194.ovpn;
 echo '<ca>' >> /etc/openvpn/client-tcp-1194.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-1194.ovpn
 echo '</ca>' >> /etc/openvpn/client-tcp-1194.ovpn
 cp client-tcp-1194.ovpn /home/vps/public_html/
-
+#config udp
 wget -O /etc/openvpn/client-udp-1194.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-1194.conf"
 sed -i $MYIP2 /etc/openvpn/client-udp-1194.ovpn;
 echo '<ca>' >> /etc/openvpn/client-udp-1194.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-1194.ovpn
 cp client-udp-1194.ovpn /home/vps/public_html/
-
+#config ssl tcp
 wget -O /etc/openvpn/client-tcp-ssl.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-ssl.conf"
 echo '<ca>' >> /etc/openvpn/client-tcp-ssl.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-ssl.ovpn
 echo '</ca>' >> /etc/openvpn/client-tcp-ssl.ovpn
 cp client-tcp-ssl.ovpn /home/vps/public_html/
-
+#config ssl udp
 wget -O /etc/openvpn/client-udp-ssl.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-ssl.conf"
 echo '<ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cp client-udp-ssl.ovpn /home/vps/public_html/
-
-
-cd
-#unzip semua file 
-cd /home/vps/public_html
-zip config.zip client-tcp-1194.conf client-udp-1194.conf client-tcp-ssl.conf client-udp-ssl.conf
-
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
@@ -356,6 +352,10 @@ chmod +x info
 chmod +x about
 chmod +x delete
 
+cd
+#unzip semua file 
+cd /home/vps/public_html
+zip config.zip client-tcp-1194.conf client-udp-1194.conf client-tcp-ssl.conf client-udp-ssl.conf
 
 # autoreboot 12 jam
 
