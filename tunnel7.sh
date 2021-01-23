@@ -121,12 +121,19 @@ chmod +x /etc/openvpn/ca.crt
 
 # server settings
 cd /etc/openvpn/
-wget -O /etc/openvpn/server.conf "https://raw.githubusercontent.com/acillsadank/install/master/server.conf"
+wget -O /etc/openvpn/server-tcp-1194.conf"https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/server-tcp-1194.conf"
+wget -O /etc/openvpn/server-udp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/server-udp-1194.conf"
+
 systemctl start openvpn@server
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
 iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
 iptables-save > /etc/iptables.up.rules
 wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/acillsadank/install/master/iptables"
 chmod +x /etc/network/if-up.d/iptables
@@ -135,16 +142,29 @@ systemctl daemon-reload
 /etc/init.d/openvpn restart
 
 # openvpn config
-wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/acillsadank/install/master/client.conf"
-sed -i $MYIP2 /etc/openvpn/client.ovpn;
-echo '<ca>' >> /etc/openvpn/client.ovpn
-cat /etc/openvpn/ca.crt >> /etc/openvpn/client.ovpn
-echo '</ca>' >> /etc/openvpn/client.ovpn
-cp client.ovpn /home/vps/public_html/
+wget -O /etc/openvpn/client-tcp-1194.conf"https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-1194.conf"
+sed -i $MYIP2 /etc/openvpn/client-tcp-1194.conf;
+echo '<ca>' >> /etc/openvpn/client-tcp-1194.conf
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-1194.conf
+echo '</ca>' >> /etc/openvpn/client-tcp-1194.conf
+
+cp client-tcp-1194.conf /home/vps/public_html/
+
+
+wget -O /etc/openvpn/client-udp-1194.conf"https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-1194.conf"
+sed -i $MYIP2 /etc/openvpn/client-udp-1194.conf;
+echo '<ca>' >> /etc/openvpn/client-udp-1194.conf
+cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.conf
+echo '</ca>' >> /etc/openvpn/client-udp-1194.conf
+
+cp client-tcp-1194.conf /home/vps/public_html/
+
+
 wget -O /etc/openvpn/openvpnssl.ovpn "https://raw.githubusercontent.com/acillsadank/install/master/openvpnssl.conf"
 echo '<ca>' >> /etc/openvpn/openvpnssl.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/openvpnssl.ovpn
 echo '</ca>' >> /etc/openvpn/openvpnssl.ovpn
+
 cp openvpnssl.ovpn /home/vps/public_html/
 
 # install badvpn
@@ -223,14 +243,21 @@ cd ddos-deflate-master
 ./install.sh
 rm -rf /root/ddos-deflate-master.zip
 
-# banner /etc/bnr
-wget -O /etc/bnr "https://raw.githubusercontent.com/acillsadank/install/master/bnr"
-sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
-sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/bnr"@g' /etc/default/dropbear
+# common password debian 
+wget -O /etc/pam.d/common-password "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
+chmod +x /etc/pam.d/common-password
 
-# xml parser
-cd
-apt-get install -y libxml-parser-perl
+
+# Custom Banner SSH
+
+echo "================  Banner ======================"
+wget -O /etc/issue.net "https://github.com/idtunnel/sshtunnel/raw/master/debian9/banner-custom.conf"
+chmod +x /etc/issue.net
+
+echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
+echo "DROPBEAR_BANNER="/etc/issue.net"" >> /etc/default/dropbear
+
+
 
 # download script
 cd /usr/bin
@@ -293,11 +320,6 @@ openvpnport="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $
 squidport="$(cat /etc/squid/squid.conf | grep -i http_port | awk '{print $2}')"
 nginxport="$(netstat -nlpt | grep -i nginx| grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
 
-# install neofetch
-echo "deb http://dl.bintray.com/dawidd6/neofetch jessie main" | tee -a /etc/apt/sources.list
-curl "https://bintray.com/user/downloadSubjectPublicKey?username=bintray"| apt-key add -
-apt-get update
-apt-get install neofetch
 
 # remove unnecessary files
 apt -y autoremove
@@ -350,4 +372,4 @@ echo "Installation Log --> /root/log-install.txt"  | tee -a log-install.txt
 echo ""  | tee -a log-install.txt
 echo "==========================================="  | tee -a log-install.txt
 cd
-rm -f /root/install.sh
+
