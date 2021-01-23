@@ -33,5 +33,4 @@ chmod +x /usr/local/bin/stdev-l2tp-remove-user
 chmod +x /usr/local/bin/stdev-l2tp-get-psk
 
 #auto installer SSH + Dropbear +Stunnel + SSLH Multi Port 
-
-wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh2baru.sh && chmod +x ssh-baru.sh && ./ssh-baru.sh
+wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/debian10/ssh2baru.sh && chmod +x ssh2baru.shh && ./ssh2baru.sh
