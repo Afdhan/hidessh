@@ -37,6 +37,10 @@ wget https://raw.githubusercontent.com/4hidessh/hidessh/main/ssh/lt2p && chmod +
 
 #firewall
 apt-get -y install iptables-persistent
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/torrent && chmod +x torrent && ./torrent
+wget https://raw.githubusercontent.com/4hidessh/sshtunnel/master/firewall-torent && chmod firewall-torent  && ./firewall-torent
 netfilter-persistent save
 netfilter-persistent reload 
+
+
+#hapus 
+rm -rf tunnel6.sh
