@@ -22,20 +22,6 @@ apt-get -y install curl
 apt-get -y install unrar
 
 
-# nano /etc/rc.local
-cat > /etc/rc.local <<-END
-#!/bin/sh -e
-# rc.local
-# By default this script does nothing.
-exit 0
-END
-
-# Ubah izin akses
-chmod +x /etc/rc.local
-
-# enable rc local
-systemctl enable rc-local
-
 # detail nama perusahaan
 country=ID
 state=Semarang
