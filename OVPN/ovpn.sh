@@ -135,7 +135,6 @@ systemctl start openvpn@server
 #forwarding
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-
 #firewall
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
@@ -158,30 +157,22 @@ sed -i $MYIP2 /etc/openvpn/client-tcp-1194.conf;
 echo '<ca>' >> /etc/openvpn/client-tcp-1194.conf
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-1194.conf
 echo '</ca>' >> /etc/openvpn/client-tcp-1194.conf
-
 cp client-tcp-1194.conf /home/vps/public_html/
-
 wget -O /etc/openvpn/client-udp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-1194.conf"
 sed -i $MYIP2 /etc/openvpn/client-udp-1194.conf;
 echo '<ca>' >> /etc/openvpn/client-udp-1194.conf
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-1194.conf
 echo '</ca>' >> /etc/openvpn/client-udp-1194.conf
-
 cp client-tcp-1194.conf /home/vps/public_html/
-
-
 wget -O /etc/openvpn/client-tcp-ssl.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-ssl.conf"
 echo '<ca>' >> /etc/openvpn/client-tcp-ssl.conf
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-tcp-ssl.conf
 echo '</ca>' >> /etc/openvpn/client-tcp-ssl.conf
-
 cp client-tcp-ssl.conf /home/vps/public_html/
-
 wget -O /etc/openvpn/client-udp-ssl.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-udp-ssl.conf"
 echo '<ca>' >> /etc/openvpn/client-udp-ssl.conf
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.conf
 echo '</ca>' >> /etc/openvpn/client-udp-ssl.conf
-
 cp client-udp-ssl.conf /home/vps/public_html/
 
 # install squid3
