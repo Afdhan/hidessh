@@ -144,18 +144,17 @@ systemctl start openvpn@server
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 #firewall
-iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
+iptables-save
 netfilter-persistent save
-netfilter-persistent reload 
-iptables-save > /etc/iptables.up.rules
-wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/acillsadank/install/master/iptables"
-chmod +x /etc/network/if-up.d/iptables
+netfilter-persistent reload
+
+#iptables-save > /etc/iptables.up.rules
+#wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/acillsadank/install/master/iptables"
+#chmod +x /etc/network/if-up.d/iptables
 sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn@.service
 systemctl daemon-reload
 /etc/init.d/openvpn restart
@@ -341,6 +340,12 @@ cd
 #unzip semua file 
 cd /home/vps/public_html
 zip config.zip client-tcp-1194.ovpn client-udp-1194.ovpn client-tcp-ssl.ovpn client-udp-ssl.ovpn
+
+service openvpn start
+service openvpn enable
+service openvpn restart
+service ssh restart
+service dropbear restart
 
 # autoreboot 12 jam
 
