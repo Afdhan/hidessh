@@ -185,7 +185,7 @@ iptables -A INPUT -i eth0 -m state --state
 iptables -A INPUT -i tun+ -j ACCEPT
 iptables -A FORWARD -i tun+ -j ACCEPT
 iptables -A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -A FORWARD -i eth0 -o tun+ -m state
+
 
 iptables -A OUTPUT -o tun+ -j ACCEPT
 
