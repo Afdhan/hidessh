@@ -169,7 +169,7 @@ cp client-udp-ssl.ovpn /home/vps/public_html/
 # Restart OpenVPN
 /etc/init.d/openvpn restart
 service openvpn start
-service openvpn status
+
 
 
 
