@@ -23,7 +23,7 @@ apt-get install screen -y
 apt-get -y install unzip
 apt-get -y install zip
 apt-get -y install curl
-apt-get -y install unrar
+apt-get -y install unrar ca-certificates
 apt-get -y install iptables-persistent
 
 # nano /etc/rc.local
@@ -94,7 +94,7 @@ echo "<pre>Setup by HideSSH</pre>" > /home/vps/public_html/index.html
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/acillsadank/install/master/vps.conf"
 
 # install openvpn
-apt-get -y install openvpn easy-rsa openssl
+apt-get -y install openvpn easy-rsa
 cp -r /usr/share/easy-rsa/ /etc/openvpn
 mkdir /etc/openvpn/easy-rsa/keys
 sed -i 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="ID"|' /etc/openvpn/easy-rsa/vars
@@ -143,11 +143,21 @@ systemctl start openvpn@server
 #forwarding
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
 #firewall
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
+iptables -I INPUT 1 -i tun0 -j ACCEPT
+iptables -I FORWARD 1 -i $ifes -o tun0 -j ACCEPT
+iptables -I FORWARD 1 -i tun0 -o $ifes -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
+
 iptables-save
 netfilter-persistent save
 netfilter-persistent reload
