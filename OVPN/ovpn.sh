@@ -152,6 +152,13 @@ ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
 iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
 iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
+
+iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
+
+
 iptables -I INPUT 1 -i tun0 -j ACCEPT
 iptables -I FORWARD 1 -i $ifes -o tun0 -j ACCEPT
 iptables -I FORWARD 1 -i tun0 -o $ifes -j ACCEPT
@@ -316,7 +323,16 @@ chmod +x /usr/local/share/man/man7/badvpn.7
 chmod +x /usr/local/bin/badvpn-tun2socks
 chmod +x /usr/local/share/man/man8/badvpn-tun2socks.8
 chmod +x /usr/bin/build
+
+
+cd
+
+sed -i '$ i\iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE' /etc/rc.local
+sed -i '$ i\iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE' /etc/rc.local
+sed -i '$ i\iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE' /etc/rc.local
+sed -i '$ i\iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE' /etc/rc.local
 chmod +x /etc/rc.local
+
 
 # download script
 cd /usr/bin
