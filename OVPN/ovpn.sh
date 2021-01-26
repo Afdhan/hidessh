@@ -94,7 +94,7 @@ echo "<pre>Setup by HideSSH</pre>" > /home/vps/public_html/index.html
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/acillsadank/install/master/vps.conf"
 
 # install openvpn
-apt-get -y install openvpn easy-rsa
+apt-get -y install openvpn easy-rsa openssl iptables
 cp -r /usr/share/easy-rsa/ /etc/openvpn
 mkdir /etc/openvpn/easy-rsa/keys
 sed -i 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="ID"|' /etc/openvpn/easy-rsa/vars
@@ -138,43 +138,6 @@ chmod +x /etc/openvpn/ca.crt
 cd /etc/openvpn/
 wget -O /etc/openvpn/server-tcp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/server-tcp-1194.conf"
 wget -O /etc/openvpn/server-udp-1194.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/server-udp-1194.conf"
-#start openpn
-systemctl start openvpn@server
-#forwarding
-sysctl -w net.ipv4.ip_forward=1
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
-
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
-iptables -P OUTPUT ACCEPT
-#firewall
-ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
-iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
-
-iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
-
-
-iptables -I INPUT 1 -i tun0 -j ACCEPT
-iptables -I FORWARD 1 -i $ifes -o tun0 -j ACCEPT
-iptables -I FORWARD 1 -i tun0 -o $ifes -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
-
-iptables-save
-netfilter-persistent save
-netfilter-persistent reload
-
-#iptables-save > /etc/iptables.up.rules
-#wget -O /etc/network/if-up.d/iptables "https://raw.githubusercontent.com/acillsadank/install/master/iptables"
-#chmod +x /etc/network/if-up.d/iptables
-sed -i 's|LimitNPROC|#LimitNPROC|g' /lib/systemd/system/openvpn@.service
-systemctl daemon-reload
-/etc/init.d/openvpn restart
 
 #config tcp
 wget -O /etc/openvpn/client-tcp-1194.ovpn "https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/client-tcp-1194.conf"
@@ -202,6 +165,76 @@ echo '<ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cp client-udp-ssl.ovpn /home/vps/public_html/
+
+# Restart OpenVPN
+/etc/init.d/openvpn restart
+service openvpn start
+service openvpn status
+
+
+
+# set ipv4 forward
+echo 1 > /proc/sys/net/ipv4/ip_forward
+sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
+
+
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -A INPUT -i eth0 -m state --state
+iptables -A INPUT -i tun+ -j ACCEPT
+iptables -A FORWARD -i tun+ -j ACCEPT
+iptables -A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i eth0 -o tun+ -m state
+
+iptables -A OUTPUT -o tun+ -j ACCEPT
+
+
+#firewall
+ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+
+
+iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
+
+iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
+
+
+iptables -I INPUT 1 -i tun0 -j ACCEPT
+iptables -I FORWARD 1 -i $ifes -o tun0 -j ACCEPT
+iptables -I FORWARD 1 -i tun0 -o $ifes -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
+iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
+
+iptables-save
+netfilter-persistent save
+netfilter-persistent reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # install squid3
 echo "================  konfigurasi Squid3 ======================"
