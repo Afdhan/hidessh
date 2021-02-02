@@ -458,7 +458,6 @@ iptables -A INPUT -p udp --dport 7100 -j ACCEPT
   # Uncomment to disallow traffic between VPN clients
   # iptables -I FORWARD 2 -i ppp+ -o ppp+ -s "$L2TP_NET" -d "$L2TP_NET" -j DROP
   # iptables -I FORWARD 3 -s "$XAUTH_NET" -d "$XAUTH_NET" -j DROP
-  iptables -A FORWARD -j DROP
   
 iptables -A FORWARD -m string --string "BitTorrent" --algo bm --to 65535 -j DROP
 iptables -A FORWARD -m string --string "BitTorrent protocol" --algo bm --to 65535 -j DROP
