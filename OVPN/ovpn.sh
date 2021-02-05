@@ -23,8 +23,8 @@ apt-get install screen -y
 apt-get -y install unzip
 apt-get -y install zip
 apt-get -y install curl
-apt-get -y install unrar ca-certificates
-apt-get -y install iptables-persistent
+apt-get -y install unrar 
+apt-get install openvpn iptables openssl ca-certificates lighttpd -y
 
 # nano /etc/rc.local
 cat > /etc/rc.local <<-END
