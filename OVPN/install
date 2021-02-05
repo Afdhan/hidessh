@@ -8,7 +8,8 @@ unzip master.zip
 cd lolcat-master/bin
 gem install lolcat
 clear
-rm -rf ssh-installer
+
+
 apt-get -y install nginx php-fpm php-cli
 NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
 export DEBIAN_FRONTEND=noninteractive
@@ -20,19 +21,22 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 sysctl -p
 mkdir -p /etc/iptables
+
+#update package
 apt-get install -y openvpn easy-rsa iptables openssl ca-certificates gnupg
 apt-get install -y net-tools
+
 cp -r /usr/share/easy-rsa /etc/openvpn
 cd /etc/openvpn
 cd easy-rsa
 sed -i 's|export KEY_COUNTRY="US"|export KEY_COUNTRY="ID"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_PROVINCE="CA"|export KEY_PROVINCE="ID"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_CITY="SanFrancisco"|export KEY_CITY="ID"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_ORG="Fort-Funston"|export KEY_ORG="HunterNblz"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_EMAIL="me@myhost.mydomain"|export KEY_EMAIL="admin@nabil.my.id"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_OU="MyOrganizationalUnit"|export KEY_OU="HunterNblz"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_NAME="EasyRSA"|export KEY_NAME="HunterNblz"|' /etc/openvpn/easy-rsa/vars
-sed -i 's|export KEY_OU=changeme|export KEY_OU=HunterNblz|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_PROVINCE="CA"|export KEY_PROVINCE="Centraljava"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_CITY="SanFrancisco"|export KEY_CITY="Semarang"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_ORG="Fort-Funston"|export KEY_ORG="HideSSH"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_EMAIL="me@myhost.mydomain"|export KEY_EMAIL="admin@hidessh.com"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_OU="MyOrganizationalUnit"|export KEY_OU="HideSSH"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_NAME="EasyRSA"|export KEY_NAME="HideSSH"|' /etc/openvpn/easy-rsa/vars
+sed -i 's|export KEY_OU=changeme|export KEY_OU=HideSSH|' /etc/openvpn/easy-rsa/vars
 cp openssl-1.0.0.cnf openssl.cnf
 source ./vars
 ./clean-all
@@ -68,8 +72,8 @@ username-as-common-name
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "redirect-gateway bypass-dhcp"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 keepalive 10 120
 user nobody
 group nogroup
@@ -103,8 +107,8 @@ plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
 username-as-common-name
 push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 comp-lzo
 status server-tcp-9994.log
 verb 3' >/etc/openvpn/server-tcp-9994.conf
@@ -126,8 +130,8 @@ plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
 client-cert-not-required
 username-as-common-name
 push "redirect-gateway def1 bypass-dhcp"
-push "dhcp-option DNS 8.8.8.8"
-push "dhcp-option DNS 8.8.4.4"
+push "dhcp-option DNS 94.140.14.15"
+push "dhcp-option DNS 94.140.15.16"
 comp-lzo
 status server-udp-25000.log
 verb 3' >/etc/openvpn/server-udp-25000.conf
@@ -331,13 +335,17 @@ iptables -t nat -A POSTROUTING -s 10.9.0.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
 iptables-save > /etc/iptables/rules.v4
 service openvpn restart
+
+
+
 country=ID
 state=Indonesia
 locality=Cilacap
-organization=HunterNblz
-organizationalunit=HunterNblz
-commonname=HunterNblz
-email=admin@nabil.my.id
+organization=HideSSH
+organizationalunit=HideSSH
+commonname=HideSSH
+email=admin@hidessh
+
 git clone https://github.com/hunternblz/ssh-installer
 cd /root/ssh-installer/files
 rm /etc/pam.d/common-password
