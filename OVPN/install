@@ -347,10 +347,7 @@ commonname=HideSSH
 email=admin@hidessh
 
 git clone https://github.com/hunternblz/ssh-installer
-cd /root/ssh-installer/files
-rm /etc/pam.d/common-password
-mv common-password /etc/pam.d/
-chmod +x /etc/pam.d/common-password
+
 cd
 cat > /etc/systemd/system/rc-local.service <<-END
 [Unit]
@@ -372,6 +369,7 @@ END
 chmod +x /etc/rc.local
 systemctl enable rc-local
 systemctl start rc-local.service
+
 apt-get update -y
 apt-get install -y wget curl
 apt -y autoremove
@@ -390,23 +388,7 @@ apt-get -y install screen
 apt-get -y install unzip
 apt-get -y install curl
 apt-get -y install net-tools
-git clone https://github.com/dylanaraps/neofetch
-cd neofetch
-make install
-make PREFIX=/usr/local install
-make PREFIX=/boot/home/config/non-packaged install
-make -i install
-apt-get -y install neofetch
-cd
-rm -rf neofetch
-apt-get -y update
-cd
-rm /etc/nginx/sites-enabled/default
-cd ssh-installer/nginx/
-mv default /etc/nginx/sites-enabled/
-cd
-/etc/init.d/nginx restart
-systemctl restart nginx
+
 cd
 apt-get install cmake make gcc -y
 cd
@@ -511,32 +493,7 @@ rm -f key.pem
 rm -f cert.pem
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 /etc/init.d/stunnel4 restart
-cdLEDinstall fail2ban
-apt-get -y install fail2ban
-if [ -d '/usr/local/ddos' ]; then
-	echo; echo; echo "Silakan hapus/uninstall dahulu versi sebelumnya"
-	exit 0
-else
-	mkdir /usr/local/ddos
-fi
-echo; echo 'Menginstall DOS-Deflate 0.6'; echo
-echo; echo -n 'Mendownload sumber file...'
-wget -q -O /usr/local/ddos/ddos.conf http://www.inetbase.com/scripts/ddos/ddos.conf
-echo -n '.'
-wget -q -O /usr/local/ddos/LICENSE http://www.inetbase.com/scripts/ddos/LICENSE
-echo -n '.'
-wget -q -O /usr/local/ddos/ignore.ip.list http://www.inetbase.com/scripts/ddos/ignore.ip.list
-echo -n '.'
-wget -q -O /usr/local/ddos/ddos.sh http://www.inetbase.com/scripts/ddos/ddos.sh
-chmod 0755 /usr/local/ddos/ddos.sh
-cp -s /usr/local/ddos/ddos.sh /usr/local/sbin/ddos
-echo '...selesai'
-echo; echo -n 'Membuat cronjob untuk menjalankan setiap menit'
-/usr/local/ddos/ddos.sh --cron > /dev/null 2>&1
-echo '.....selesai'
-echo; echo 'Penginstallan selesai.'
-echo 'File config terletak pada /usr/local/ddos/ddos.conf'
-cd
+
 apt-get install -y libxml-parser-perl
 cd ssh-installer/files
 mv banner-ssh /etc/
@@ -544,6 +501,7 @@ echo 'File banner ssh terletak pada /etc/banner-ssh'
 cd
 sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/banner-ssh"@g' /etc/default/dropbear
+
 cd ssh-installer/menu
 mv menu.sh menu
 mv usernew.sh usernew
