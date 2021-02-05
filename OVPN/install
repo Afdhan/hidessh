@@ -9,7 +9,8 @@ cd lolcat-master/bin
 gem install lolcat
 clear
 
-
+apt-get update -y
+apt-get upgrade -y
 apt-get -y install nginx php-fpm php-cli
 NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
 export DEBIAN_FRONTEND=noninteractive
