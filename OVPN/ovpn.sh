@@ -178,62 +178,24 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
 
 
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
-iptables -P OUTPUT ACCEPT
-iptables -A INPUT -i eth0 -m state --state
-iptables -A INPUT -i tun+ -j ACCEPT
-iptables -A FORWARD -i tun+ -j ACCEPT
-iptables -A FORWARD -i tun+ -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-
-iptables -A OUTPUT -o tun+ -j ACCEPT
-
-
 #firewall
 ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+iptables -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o $ifes -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
+iptables -t nat -D POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
 
+iptables -I INPUT -p udp --dport 1194 -j ACCEPT
+iptables -I INPUT -p tcp --dport 1194 -j ACCEPT
+iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
+iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-iptables -t nat -I POSTROUTING -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -I POSTROUTING -s 192.168.200.0/24 -o $ifes -j MASQUERADE
+iptables -D INPUT -p udp --dport 1194 -j ACCEPT
+iptables -D INPUT -p tcp --dport 1194 -j ACCEPT
+iptables -D FORWARD -s 10.8.0.0/24 -j ACCEPT
+iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
-iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE
-
-
-iptables -I INPUT 1 -i tun0 -j ACCEPT
-iptables -I FORWARD 1 -i $ifes -o tun0 -j ACCEPT
-iptables -I FORWARD 1 -i tun0 -o $ifes -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p udp --dport 1194 -j ACCEPT
-iptables -I INPUT 1 -i $ifes -p tcp --dport 1194 -j ACCEPT
-
-iptables-save
 netfilter-persistent save
 netfilter-persistent reload
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # install squid3
@@ -283,12 +245,6 @@ cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 /etc/init.d/stunnel4 restart
 
-#install Dns Server
-echo "=================  DNS Server ======================"
-apt-get install resolvconf -y
-wget -O /etc/resolvconf/resolv.conf.d/head "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/dns" && chmod +x /etc/resolvconf/resolv.conf.d/head
-
-
 cd
 # common password debian 
 wget -O /etc/pam.d/common-password "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
@@ -304,33 +260,6 @@ chmod +x /etc/issue.net
 echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config
 echo "DROPBEAR_BANNER="/etc/issue.net"" >> /etc/default/dropbear
 
-
-# Instal DDOS Flate
-if [ -d '/usr/local/ddos' ]; then
-	echo; echo; echo "Please un-install the previous version first"
-	exit 0
-else
-	mkdir /usr/local/ddos
-fi
-clear
-echo; echo 'Installing DOS-Deflate 0.6'; echo
-echo; echo -n 'Downloading source files...'
-wget -q -O /usr/local/ddos/ddos.conf http://www.inetbase.com/scripts/ddos/ddos.conf
-echo -n '.'
-wget -q -O /usr/local/ddos/LICENSE http://www.inetbase.com/scripts/ddos/LICENSE
-echo -n '.'
-wget -q -O /usr/local/ddos/ignore.ip.list http://www.inetbase.com/scripts/ddos/ignore.ip.list
-echo -n '.'
-wget -q -O /usr/local/ddos/ddos.sh http://www.inetbase.com/scripts/ddos/ddos.sh
-chmod 0755 /usr/local/ddos/ddos.sh
-cp -s /usr/local/ddos/ddos.sh /usr/local/sbin/ddos
-echo '...done'
-echo; echo -n 'Creating cron to run script every minute.....(Default setting)'
-/usr/local/ddos/ddos.sh --cron > /dev/null 2>&1
-echo '.....done'
-echo; echo 'Installation has completed.'
-echo 'Config file is at /usr/local/ddos/ddos.conf'
-echo 'Please send in your comments and/or suggestions to zaf@vsnl.com'
 
 echo "================= Auto Installer Disable badVPN V 3  ======================"
 # buat directory badvpn
