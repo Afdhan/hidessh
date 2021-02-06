@@ -1,26 +1,23 @@
 #!/bin/bash
 
-clear
-apt-get install ruby -y
-ruby --version
-wget https://github.com/busyloop/lolcat/archive/master.zip
-unzip master.zip
-cd lolcat-master/bin
-gem install lolcat
-clear
 
 apt-get update -y
 apt-get upgrade -y
+
 apt-get -y install nginx php-fpm php-cli
 NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
+
 export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
+
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.local
 echo 1 > /proc/sys/net/ipv4/ip_forward
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 sysctl -p
+
+
 mkdir -p /etc/iptables
 
 #update package
@@ -389,6 +386,14 @@ apt-get -y install screen
 apt-get -y install unzip
 apt-get -y install curl
 apt-get -y install net-tools
+apt-get -y update
+cd
+rm /etc/nginx/sites-enabled/default
+cd ssh-installer/nginx/
+mv default /etc/nginx/sites-enabled/
+cd
+/etc/init.d/nginx restart
+systemctl restart nginx
 
 cd
 apt-get install cmake make gcc -y
