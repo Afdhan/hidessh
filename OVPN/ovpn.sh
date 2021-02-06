@@ -295,15 +295,6 @@ chmod +x /usr/local/share/man/man8/badvpn-tun2socks.8
 chmod +x /usr/bin/build
 
 
-cd
-
-sed -i '$ i\iptables -t nat -A POSTROUTING -o ens3 -s 192.168.100.0/24 -j MASQUERADE' /etc/rc.local
-sed -i '$ i\iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE' /etc/rc.local
-sed -i '$ i\iptables -t nat -A POSTROUTING -o ens3 -s 192.168.200.0/24 -j MASQUERADE' /etc/rc.local
-sed -i '$ i\iptables -t nat -A POSTROUTING -s 192.168.200.0/24 -o eth0 -j MASQUERADE' /etc/rc.local
-chmod +x /etc/rc.local
-
-
 # download script
 cd /usr/bin
 wget -O menu "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/menu.sh"
