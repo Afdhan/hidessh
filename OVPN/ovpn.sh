@@ -8,6 +8,8 @@ export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
+NIC=$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)
+
 
 # Delete Acount SSH Expired
 echo "================  Auto deleted Account Expired ======================"
@@ -166,9 +168,16 @@ cat /etc/openvpn/ca.crt >> /etc/openvpn/client-udp-ssl.ovpn
 echo '</ca>' >> /etc/openvpn/client-udp-ssl.ovpn
 cp client-udp-ssl.ovpn /home/vps/public_html/
 
+
+apt-get install -y iptables iptables-persistent netfilter-persistent
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.9.0.0/24 -o $NIC -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
+iptables-save > /etc/iptables/rules.v4
+
+service openvpn restart
 # Restart OpenVPN
 /etc/init.d/openvpn restart
-service openvpn start
 
 
 
@@ -179,23 +188,23 @@ sed -i 's|#net.ipv4.ip_forward=1|net.ipv4.ip_forward=1|' /etc/sysctl.conf
 
 
 #firewall
-ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
-iptables -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o $ifes -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
-iptables -t nat -D POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
+#ifes="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)";
+#iptables -t nat -I POSTROUTING 1 -s 10.8.0.0/24 -o $ifes -j MASQUERADE
+#iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
+#iptables -t nat -D POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to xxxxxxxxx
 
-iptables -I INPUT -p udp --dport 1194 -j ACCEPT
-iptables -I INPUT -p tcp --dport 1194 -j ACCEPT
-iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
-iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+#iptables -I INPUT -p udp --dport 1194 -j ACCEPT
+#iptables -I INPUT -p tcp --dport 1194 -j ACCEPT
+#iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
+#iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-iptables -D INPUT -p udp --dport 1194 -j ACCEPT
-iptables -D INPUT -p tcp --dport 1194 -j ACCEPT
-iptables -D FORWARD -s 10.8.0.0/24 -j ACCEPT
-iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+#iptables -D INPUT -p udp --dport 1194 -j ACCEPT
+#iptables -D INPUT -p tcp --dport 1194 -j ACCEPT
+#iptables -D FORWARD -s 10.8.0.0/24 -j ACCEPT
+#iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 
-netfilter-persistent save
-netfilter-persistent reload
+#netfilter-persistent save
+#netfilter-persistent reload
 
 
 # install squid3
