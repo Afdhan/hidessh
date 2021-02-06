@@ -178,8 +178,8 @@ service openvpn restart
 # Restart OpenVPN
 /etc/init.d/openvpn restart
 
-
-
+sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE" /etc/rc.local
+sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.9.0.0/24 -o $NIC -j MASQUERADE" /etc/rc.local
 
 # set ipv4 forward
 echo 1 > /proc/sys/net/ipv4/ip_forward
