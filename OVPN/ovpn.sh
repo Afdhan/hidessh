@@ -172,7 +172,6 @@ cp client-udp-ssl.ovpn /home/vps/public_html/
 apt-get install -y iptables iptables-persistent netfilter-persistent
 iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o $NIC -j MASQUERADE
 iptables -t nat -A POSTROUTING -s 10.9.0.0/24 -o $NIC -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 20.8.0.0/24 -o $NIC -j MASQUERADE
 iptables-save > /etc/iptables/rules.v4
 
 service openvpn restart
