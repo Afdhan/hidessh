@@ -2,7 +2,7 @@ Copyright 2021 hidessh.com
 
 Auto installer Script 
 
-============================================
+
 #SSH TUNNEL + SSHL Multi Port
 ============================================
 
@@ -13,7 +13,6 @@ wget https://github.com/4hidessh/sshtunnel/blob/master/debian10/ssh1.sh && chmod
 
 
 #Tunnel VPN
-============================================
 #L2TP/IPSec TUNNEL + SSH TUNNEL
 ============================================
 
@@ -22,7 +21,6 @@ installer
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/l2tp/ssh-lt2p && chmod +x ssh-lt2p && bash ssh-lt2p
 ************
 
-============================================
 #OpenVPN TUNNEL + SSH TUNNEL
 ============================================
 
@@ -31,7 +29,6 @@ installer
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/ovpn.sh && chmod +x ovpn.sh && bash ovpn.sh
 ************
 
-============================================
 #WIREGUARD TUNNEL + SSH TUNNEL
 ============================================
 
