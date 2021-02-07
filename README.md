@@ -6,7 +6,7 @@
 installer 
 ************
 wget https://github.com/4hidessh/sshtunnel/blob/master/debian10/ssh1.sh && chmod +x ssh1.sh  && ./ssh1.sh 
-
+************
 
 #Tunnel VPN
 
