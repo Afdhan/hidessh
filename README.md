@@ -1,13 +1,28 @@
 # hidessh
 
+#SSH TUNNEL + SSHL Multi Port
+============================================
 
+installer 
+************
+wget https://github.com/4hidessh/sshtunnel/blob/master/debian10/ssh1.sh && chmod +x ssh1.sh  && ./ssh1.sh 
+
+
+#Tunnel VPN
 
 #L2TP/IPSec TUNNEL + SSH TUNNEL
 ============================================
 
 installer 
 ************
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/tunnel6.sh && chmod +x tunnel6.sh && ./tunnel6.sh 
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/l2tp/ssh-lt2p && chmod +x ssh-lt2p && bash ssh-lt2p
+
+#OpenVPN TUNNEL + SSH TUNNEL
+============================================
+
+installer 
+************
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/ovpn.sh && chmod +x ovpn.sh && bash ovpn.sh
 
 
 
