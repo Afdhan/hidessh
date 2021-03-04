@@ -1,2 +1,12 @@
 #bash 
 #config tls && no tls
+
+
+#buat diresdori baru
+mkdir /data
+
+#konfigurasi Certifikat TLS
+wget -O /data/tls.pem "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
+
+#konfigurasi NOn TLS
+wget -O /data/tls.pem "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/common-password-deb9"
