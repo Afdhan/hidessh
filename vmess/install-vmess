@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Created By Satmaxt HideSSH
+# Created By HideSSH
 # Some methods from 233boy/v2ray
+
+apt-get update -y && apt-get install wget curl -y
 
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
