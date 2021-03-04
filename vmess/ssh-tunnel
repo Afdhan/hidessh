@@ -169,6 +169,13 @@ chmod +x /usr/local/share/man/man8/badvpn-tun2socks.8
 chmod +x /usr/bin/build
 chmod +x /etc/rc.local
 
+
+
+#firewall
+https://raw.githubusercontent.com/4hidessh/hidessh/main/security/torrent && chmod +x torrent && ./torrent
+netfilter-persistent save
+netfilter-persistent reload 
+
 # autoreboot 12 jam
 
 echo "================  Auto Reboot ======================"
