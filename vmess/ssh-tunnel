@@ -172,7 +172,8 @@ chmod +x /etc/rc.local
 
 
 #firewall
-https://raw.githubusercontent.com/4hidessh/hidessh/main/security/torrent && chmod +x torrent && ./torrent
+apt install iptables-persistent -y
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/security/torrent && chmod +x torrent && ./torrent
 netfilter-persistent save
 netfilter-persistent reload 
 
