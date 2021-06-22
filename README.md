@@ -44,3 +44,18 @@ wget https://raw.githubusercontent.com/4hidessh/hidessh/main/wg-hidessh && chmod
 ************
 
 ==============================================
+
+
+
+
+
+Update Scipt
+
+
+#SSH TUNNEL + Websocket 
+============================================
+
+installer 
+************
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/ssh-vpn.sh && chmod +x ssh-vpn.sh  && ./ssh-vpn.sh 
+************
