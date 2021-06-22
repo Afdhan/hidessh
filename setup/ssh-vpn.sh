@@ -1,5 +1,9 @@
 #!/bin/bash 
 
+#script auto installer SSH + SSLH
+#created bye HideSSH.com and Kumpulanremaja.com
+#OS Ubuntu and debian
+
 # initializing var
 export DEBIAN_FRONTEND=noninteractive
 MYIP=$(wget -qO- icanhazip.com);
@@ -10,12 +14,12 @@ ver=$VERSION_ID
 
 #detail nama perusahaan
 country=ID
-state=Indonesia
-locality=Indonesia
-organization=javsex.tech
-organizationalunit=javsex.tech
-commonname=PT.KewekSKUY
-email=admin@javsex.tech
+state=Semarang
+locality=JawaTengah
+organization=hidessh
+organizationalunit=HideSSH
+commonname=hidessh.com
+email=admin@hidessh.com
 
 # simple password minimal
 wget -q -O /etc/pam.d/common-password "https://raw.githubusercontent.com/ZzZzZzZXCoo/no/main/password"
