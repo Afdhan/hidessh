@@ -194,7 +194,7 @@ apt -y install tmux
 apt -y install ruby
 gem install lolcat
 apt -y install figlet
-wget -q -O /usr/local/bin/edu-proxy https://raw.githubusercontent.com/ZzZzZzZXCoo/no/main/pdirect.py
+wget -q -O /usr/local/bin/edu-proxy https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/websocket.py
 chmod +x /usr/local/bin/edu-proxy
 
 # Installing Service
