@@ -27,6 +27,8 @@ wget https://raw.githubusercontent.com/4hidessh/hidessh/main/l2tp/ssh-lt2p && ch
 installer 
 ************
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/ovpn.sh && chmod +x ovpn.sh && bash ovpn.sh
+
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/vpn.sh && chmod +x vpn.sh && bash vpn.sh
 ************
 
 #WIREGUARD TUNNEL + SSH TUNNEL
