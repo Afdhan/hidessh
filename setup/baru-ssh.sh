@@ -35,5 +35,10 @@ cho "$host" >> /etc/v2ray/domain
 
 #installh auto installer SSH
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/ssh1.sh && chmod +x ssh1.sh && screen -S ssh1.sh ./ssh1.sh
-wget https://raw.githubusercontent.com/${GitUser}/test1/main/websocket-python/websocket.sh && chmod +x websocket.sh && screen -S websocket.sh ./websocket.sh
+echo "MTungu 5 detik proses selanjutnya"
+sleep 5
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/pythonws.sh && chmod +x pythonws.sh && screen -S pythonws.sh ./pythonws.sh
 
+
+rm -rf ssh1.sh 
+rm -rf pythonws.sh
