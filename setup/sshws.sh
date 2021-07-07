@@ -32,7 +32,7 @@ read -p "Hostname / Domain: " host
 echo "IP=$host" >> /var/lib/crot-script/ipvps.conf
 cho "$host" >> /etc/v2ray/domain
 
-
+rm -rf sshws.sh
 #installh auto installer SSH
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/ssh1.sh && chmod +x ssh1.sh && screen -S ssh1.sh ./ssh1.sh
 echo "MTungu 5 detik proses selanjutnya"
