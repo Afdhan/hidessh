@@ -1,5 +1,9 @@
 Copyright 2021 hidessh.com
 
+
+Update Dulu
+apt-get update && apt-get upgrade -y && update-grub && sleep 2 && reboot
+
 Auto installer Script 
 
 
@@ -59,5 +63,6 @@ Update Scipt
 
 installer 
 ************
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/ssh-vpn.sh && chmod +x ssh-vpn.sh  && ./ssh-vpn.sh 
+sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.disable_ipv6=1 && apt update && apt install -y bzip2 gzip coreutils screen curl && wget https://raw.githubusercontent.com/4hidessh/hidessh/main/setup/sshws.sh && chmod +x sshws.sh && sed -i -e 's/\r$//' sshws.sh && screen -S sshws.sh ./sshws.sh
+
 ************
