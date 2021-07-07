@@ -304,7 +304,7 @@ chmod +x speedtest
 chmod +x info
 chmod +x about
 chmod +x delete
-chmod +x addhost
+chmod +x add-host
 
 # autoreboot 12 jam
 
