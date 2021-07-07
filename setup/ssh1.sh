@@ -279,7 +279,7 @@ netfilter-persistent reload
 
 echo "================  install Menu tambahan ======================"
 cd /usr/bin
-wget -O add-host "https://raw.githubusercontent.com/4hidessh/cuy1/main/tambah/addhost.sh"
+wget -O addhost "https://raw.githubusercontent.com/4hidessh/cuy1/main/tambah/addhost1.sh"
 wget -O menu "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/menu.sh"
 wget -O usernew "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/usernew.sh"
 wget -O trial "https://raw.githubusercontent.com/idtunnel/sshtunnel/master/debian9/trial.sh"
@@ -304,7 +304,7 @@ chmod +x speedtest
 chmod +x info
 chmod +x about
 chmod +x delete
-chmod +x add-host
+chmod +x addhost
 
 # autoreboot 12 jam
 
