@@ -52,12 +52,6 @@ wget https://raw.githubusercontent.com/4hidessh/hidessh/main/wg-hidessh && chmod
 ==============================================
 
 
-
-
-
-Update Scipt
-
-
 #SSH TUNNEL + Websocket 
 ============================================
 
@@ -70,5 +64,5 @@ sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.di
 ============================================
 
 ************
-sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.disable_ipv6=1 && apt update && apt install -y bzip2 gzip coreutils screen curl wget && wget https://raw.githubusercontent.com/4hidessh/websocket/main/setup.sh && chmod +x setup.sh && sed -i -e 's/\r$//' setup.sh && screen -S setup ./setup.sh
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/OVPN/ovpnbaru.sh && chmod +x ovpnbaru.sh && ./ovpnbaru.sh
 ************
