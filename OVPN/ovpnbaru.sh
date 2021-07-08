@@ -15,7 +15,9 @@ apt install openvpn easy-rsa unzip -y
 apt install openssl iptables iptables-persistent -y
 mkdir -p /etc/openvpn/server/easy-rsa/
 cd /etc/openvpn/
-wget https://adiscript.vercel.app/vpn/vpn.zip
+#download configurasi openserver
+#wget https://adiscript.vercel.app/vpn/vpn.zip
+wget https://github.com/4hidessh/hidessh/blob/main/OVPN/vpn.zip?raw=true
 unzip vpn.zip
 rm -f vpn.zip
 chown -R root:root /etc/openvpn/server/easy-rsa/
