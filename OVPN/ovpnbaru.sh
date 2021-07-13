@@ -178,3 +178,6 @@ systemctl start openvpn
 history -c
 rm -f /root/vpn.sh
 
+#xip file openvpn
+cd /home/vps/public_html
+zip config.zip client-tcp-1194.ovpn client-tcp-ssl.ovpn client-udp-2200.ovpn
