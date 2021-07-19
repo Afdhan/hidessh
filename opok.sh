@@ -256,7 +256,7 @@ chmod +x kernel-updt
 chmod +x ganti-host
 
 #install websocker SSH dan Dropbear
-wget https://raw.githubusercontent.com/4hidessh/hidessh/main/webscoket/install-ws.sh && chmod +x install-ws.sh && ./install-ws.sh
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/webscoket/all-install.sh && chmod +x all-install.sh && ./all-install.sh
 
 # Delete Acount SSH Expired
 echo "================  Auto deleted Account Expired ======================"
