@@ -11,7 +11,7 @@ example : bug.subdomain.hidessh.com
 
 non Wilcrd 
 submain.server.com
-example : subdomain.hidessh.com
+example : sg4,hidessh.my.id
 
 ===================================
 
