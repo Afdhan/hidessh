@@ -128,7 +128,7 @@ echo "/usr/sbin/nologin" >> /etc/shells
 # install squid
 cd
 apt -y install squid3
-wget -O /etc/squid/squid.conf "https://adiscript.vercel.app/vpn/squid3.conf"
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/4hidessh/hidessh/main/config/squid2"
 sed -i $MYIP2 /etc/squid/squid.conf
 
 # install stunnel
