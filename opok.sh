@@ -255,12 +255,25 @@ chmod +x xp
 chmod +x kernel-updt
 chmod +x ganti-host
 
+cd
+# iptables-persistent
+echo "================  Firewall ======================"
+apt install iptables-persistent -y
+wget https://raw.githubusercontent.com/4hidessh/hidessh/main/security/torrent
+chmod +x torrent
+bash torrent
+netfilter-persistent save
+netfilter-persistent reload 
+
+cd
 #install websocker SSH dan Dropbear
 wget https://raw.githubusercontent.com/4hidessh/hidessh/main/webscoket/all-install.sh && chmod +x all-install.sh && ./all-install.sh
-
+cd
 # Delete Acount SSH Expired
 echo "================  Auto deleted Account Expired ======================"
 wget -O /usr/local/bin/userdelexpired "https://raw.githubusercontent.com/4hidessh/sshtunnel/master/userdelexpired" && chmod +x /usr/local/bin/userdelexpired
+
+
 
 #auto reboot server
 echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
@@ -301,11 +314,12 @@ apt-get install net-tools -y
 apt-get install tcpdump -y
 apt-get install dsniff -y
 apt install grepcidr -y
+
 # Instal DDOS Flate
-wget https://github.com/jgmdev/ddos-deflate/archive/master.zip -O ddos.zip
-unzip ddos.zip
-cd ddos-deflate-master
-./install.sh
+#wget https://github.com/jgmdev/ddos-deflate/archive/master.zip -O ddos.zip
+#unzip ddos.zip
+#cd ddos-deflate-master
+#./install.sh
 
 # finihsing
 clear
