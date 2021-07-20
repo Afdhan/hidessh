@@ -188,6 +188,15 @@ iptables-restore -t < /etc/iptables.up.rules
 netfilter-persistent save
 netfilter-persistent reload
 
+#install sslh
+apt-get install sslh -y
+
+#konfigurasi
+wget -O /etc/default/sslh "https://raw.githubusercontent.com/4hidessh/hidessh/main/sslh/config"
+service sslh restart
+
+
+
 # download script
 cd /usr/bin
 wget -O add-host "https://adiscript.vercel.app/vpn/add-host.sh"
