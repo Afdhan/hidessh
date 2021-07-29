@@ -6,7 +6,6 @@ LISTENING_ADDR = '0.0.0.0'
 LISTENING_PORT = sys.argv[1]
 else:
   LISTENING_PORT = 7770
-
 # Pass
 PASS = ''
 
