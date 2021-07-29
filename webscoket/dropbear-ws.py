@@ -4,6 +4,8 @@ import socket, threading, thread, select, signal, sys, time, getopt
 # Listen
 LISTENING_ADDR = '0.0.0.0'
 LISTENING_PORT = sys.argv[1]
+else:
+  LISTENING_PORT = 7770
 
 # Pass
 PASS = ''
@@ -12,7 +14,7 @@ PASS = ''
 BUFLEN = 4096 * 4
 TIMEOUT = 60
 DEFAULT_HOST = '127.0.0.1:77'
-RESPONSE = 'HTTP/1.1 101 WebSocket bye HideSSH\r\nContent-Length: 104857600000\r\n\r\n'
+RESPONSE = 'HTTP/1.1 101 WebSocket bye HideSSH.com\r\nContent-Length: 104857600000\r\n\r\n'
 
 class Server(threading.Thread):
     def __init__(self, host, port):
